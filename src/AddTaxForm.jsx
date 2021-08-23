@@ -1,9 +1,13 @@
 import { ErrorMessage, Field, Form, Formik } from 'formik';
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styles from './AddTaxForm.module.css'
+// import data from './data';
 
-export default function AddTaxForm() {
+export default function AddTaxForm({ appliedToData, list }) {
     const formRef = useRef();
+    const [organizedItems, setOrganizedItems] = useState(null)
+    const [categories, setCategories] = useState([])
+    const [applicableItems, setApplicableItems] = useState([])
 
 
     const submitForm = () => {
@@ -14,6 +18,40 @@ export default function AddTaxForm() {
         }
     }
 
+    useEffect(() => {
+        if (appliedToData) {
+            setApplicableItems(appliedToData["applicable_items"])
+        }
+    })
+
+
+    useEffect(() => {
+        if (list) {
+            const items = {}
+            const categories = []
+            list.forEach((item) => {
+                if (item?.category?.id && item.category.name) {
+                    if (items.hasOwnProperty(item.category.name)) {
+                        items[item.category.name].push(item)
+                    } else {
+                        items[item.category.name] = [item]
+                        categories.unshift(item.category.name)
+                    }
+                } else {
+                    if (items.hasOwnProperty("Other")) {
+                        items["Other"].push(item)
+                    } else {
+                        items["Other"] = [item]
+                        categories.push("Other")
+                    }
+                }
+            })
+            setCategories(categories)
+            setOrganizedItems(items)
+        }
+    }, [list])
+
+
     return (
         <div className={styles.container}>
             <div className={styles.main}>
@@ -22,7 +60,8 @@ export default function AddTaxForm() {
                     <p>X</p>
                 </div>
                 <Formik
-                    initialValues={{ name: 'four', rate: 0, appliedTo: "some" }}
+                    enableReinitialize
+                    initialValues={appliedToData ? { ...appliedToData, applicableItems , checkedCategories:[] } : { name: '', rate: 0, ['applied_to']: "some" }}
                     validate={values => {
                         const errors = {};
                         if (!values.name) {
@@ -35,9 +74,9 @@ export default function AddTaxForm() {
                         return errors;
                     }}
                     innerRef={formRef}
-                    onSubmit={(values) => console.log('after for values',values)}
+                    onSubmit={(values) => console.log('after for values', values)}
                 >
-                    { () => (
+                    {() => (
                         <Form className={styles.form}>
                             <div className={styles.inputs}>
                                 <div className={styles.fields}>
@@ -52,14 +91,36 @@ export default function AddTaxForm() {
                             <div role="group" aria-labelledby="my-radio-group" className={styles.radio__group}>
                                 <label className={styles.radio__label}>
                                     Apply to all items in collection
-                                    <Field type="radio" name="appliedTo" value="all" />
-                                    <span className={styles.checkmark}></span>
+                                    <Field type="radio" name="applied_to" value="all" />
+                                    <span className={styles.mark + ' ' + styles.radio__mark}></span>
                                 </label>
                                 <label className={styles.radio__label}>
                                     Apply to specific items
-                                    <Field type="radio" name="appliedTo" value="some" />
-                                    <span className={styles.checkmark}></span>
+                                    <Field type="radio" name="applied_to" value="some" />
+                                    <span className={styles.mark + ' ' + styles.radio__mark }></span>
                                 </label>
+                            </div>
+                            <hr className={styles.line} />
+                            <div className={styles.options}>
+                                {
+                                    organizedItems !== null &&
+                                    categories.map((category, index) => {
+                                        return (
+                                            <div>
+                                                <p>{category}</p>
+                                                {organizedItems[category].map((item, i) => {
+                                                    return (
+                                                        <label className={styles.radio__label}>
+                                                            {item.name}
+                                                            <Field type="checkbox" name="applicableItems" value={item.id} />
+                                                            <span className={styles.mark + ' ' + styles.check__mark}></span>
+                                                        </label>
+                                                    )
+                                                })}
+                                            </div>
+                                        )
+                                    })
+                                }
                             </div>
 
                         </Form>
@@ -67,9 +128,6 @@ export default function AddTaxForm() {
                 </Formik>
             </div>
             <hr />
-            <div>
-                <p>hi</p>
-            </div>
             <button type="submit" onClick={submitForm} >
                 Submit
             </button>

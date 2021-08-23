@@ -3,13 +3,14 @@
     margin: 0 auto;
 }
 
-.main {
-    padding: 1rem 2rem;
-}
-
 .header {
     display: flex;
     justify-content: space-between;
+    padding: 0 2rem;
+}
+
+.inputs {
+    padding: 0 2rem;
 }
 
 /* inputs */
@@ -23,7 +24,7 @@
     font-size: 1rem;
     display: flex;
     align-items: center;
-    padding: .2rem .6rem;
+    padding: 0.2rem 0.6rem;
 }
 
 .name__container {
@@ -38,36 +39,26 @@
 .rate__input,
 .name__input {
     border: none;
-    padding: 3px 0 ;
+    padding: 3px 0;
     outline: none;
 }
 
-.rate__input{
-    padding-right:1rem;
-    width:80px
+.rate__input {
+    padding-right: 1rem;
+    width: 80px;
 }
-
 
 .radio__group {
     margin-top: 1rem;
+    padding: 0 2rem;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+.options {
+    padding: 0 2rem;
+}
 
 /* ---------------------------------------------------------------------------------------------------------- */
-/* Custom checkbox */
+/* Custom Radio */
 
 /* The container */
 .radio__label {
@@ -80,54 +71,61 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-  }
-  
-  /* Hide the browser's default checkbox */
-  .radio__label input {
+}
+
+/* Hide the browser's default checkbox */
+.radio__label input {
     position: absolute;
     opacity: 0;
     cursor: pointer;
     height: 0;
     width: 0;
-  }
-  
-  /* Create a custom checkbox */
-  .checkmark {
+}
+
+/* Create a custom checkbox */
+.mark {
     position: absolute;
     top: 50%;
-    transform:translateY(-50%);
+    transform: translateY(-50%);
     left: 0;
     height: 1rem;
     width: 1rem;
     background-color: #eee;
-    border-radius: 50px;
+}
 
-  }
-  
-  /* On mouse-over, add a grey background color */
-  .radio__label:hover input ~ .checkmark {
+.radio__mark {
+    border-radius: 50px;
+}
+
+/* On mouse-over, add a grey background color */
+.radio__label:hover input ~ .mark {
     background-color: #ccc;
-  }
-  
-  /* When the checkbox is checked, add a blue background */
-  .radio__label input:checked ~ .checkmark {
+}
+
+/* When the checkbox is checked, add a blue background */
+
+.radio__label input:checked ~ .radio__mark {
     background-color: #f0703a;
-  }
-  
-  /* Create the checkmark/indicator (hidden when not checked) */
-  .checkmark:after {
+}
+
+.radio__label input:checked ~ .check__mark {
+    background-color: #327b91;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.mark:after {
     content: "";
     position: absolute;
     display: none;
-  }
-  
-  /* Show the checkmark when checked */
-  .radio__label input:checked ~ .checkmark:after {
+}
+
+/* Show the checkmark when checked */
+.radio__label input:checked ~ .mark:after {
     display: block;
-  }
-  
-  /* Style the checkmark/indicator */
-  .radio__label .checkmark:after {
+}
+
+/* Style the checkmark/indicator */
+.radio__label .mark:after {
     left: 31.25%;
     top: 12.5%;
     width: 3px;
@@ -137,6 +135,4 @@
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
-  }
-
-
+}

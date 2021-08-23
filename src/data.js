@@ -1,4 +1,4 @@
-[
+export default [
     {
         "id": 14864,
         "tab_id": 3202,
